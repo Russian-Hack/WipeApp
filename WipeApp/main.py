@@ -14,32 +14,32 @@ def move_focus(event):
     if event.keysym == "Up":
 
         if root.focus_get() == wipe:
-            print("hi")
-            wipe.focus_set()
+
+            wipe.focus()
             print(wipe.focus_get())
-            wipe.configure(fg_color="#434d57")
+            wipe.configure(bg="#434d57")
 
         elif root.focus_get() == mac:
-            wipe.focus_set()
-            wipe.configure(fg_color="#272e34")
-            mac.configure(fg_color="#434d57")
+            wipe.focus()
+            wipe.configure(bg="#272e34")
+            mac.configure(bg="#434d57")
 
         elif root.focus_get() == quit:
-            mac.focus_set()
-            mac.configure(fg_color="#272e34")
+            mac.focus()
+            mac.configure(bg="#272e34")
 
     elif event.keysym == "Down":
         print("bye")
         if root.focus_get() == wipe:
-            mac.focus_set()
+            mac.focus()
             mac.configure(fg_color="#272e34")
 
         elif root.focus_get() == mac:
-            quit.focus_set()
+            quit.focus()
             quit.configure(fg_color="#272e34")
 
         elif root.focus_get() == quit:
-            quit.focus_set()
+            quit.focus()
             quit.configure(fg_color="#272e34")
 
 
@@ -57,6 +57,7 @@ def activate_button(event):
         mac_clicker()
     elif (current_focus == quit):
         root.quit()
+
 
 
 # Actions performed when a button is chosen
@@ -80,23 +81,28 @@ root.configure(bg="#010101")
 frame = ttk.Frame(root)
 frame.configure(style="Custom.TFrame")
 frame.pack(fill="both", expand=True, pady=55, padx=55)
-root.bind("<Up>", move_focus, lambda e: focus(e))
-root.bind("<Down>", move_focus, lambda e: focus(e))
-root.bind("<Return>", activate_button, lambda e: focus(e))
-root.bind_all("<Button-1>", lambda e: focus(e))
+root.bind("<Up>", move_focus)
+root.bind("<Down>", move_focus)
+root.bind("<Return>", activate_button)
+
+
+
+
 # Wipe button
-wipe = customtkinter.CTkButton(frame, text="wipe", command=wipe_clicker, height=100, width=1000, hover_color="#272e34",
-                               fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
+wipe = tkinter.Button(frame, text="wipe", command=wipe_clicker(), height=10, width=40)
+#wipe = customtkinter.CTkButton(frame, text="wipe", command=wipe_clicker, height=100, width=1000, hover_color="#272e34",fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
 wipe.pack(pady=(200, 80))
 
 # MacAddress button
-mac = customtkinter.CTkButton(frame, text="wipe", command=mac_clicker, height=100, width=1000, hover_color="#272e34",
-                              fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
+mac = tkinter.Button(frame, text="mac", command=mac_clicker, height=10, width=40)
+#mac = customtkinter.CTkButton(frame, text="wipe", command=mac_clicker, height=100, width=1000, hover_color="#272e34",   fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
 mac.pack(pady=80)
 
 # QuitButton
-quit = customtkinter.CTkButton(frame, text="Exit", command=root.quit, height=100, width=1000, hover_color="#272e34",
-                               fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
+quit = tkinter.Button(frame, text="Exit", command=root.quit, height=10, width=40)
+#quit = customtkinter.CTkButton(frame, text="Exit", command=root.quit, height=100, width=1000, hover_color="#272e34",fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
+quit.focus()
+print(root.focus_get())
 quit.pack(pady=80)
 
 # Style
