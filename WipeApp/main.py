@@ -5,6 +5,7 @@ import curses
 
 import tkinter
 import customtkinter
+from tkinter import ttk
 from cProfile import label
 from tkinter.ttk import Style
 
@@ -14,25 +15,28 @@ def wipe_clicker():
 
 def mac_clicker():
     print("Mac")
+  #  my_label.configure(text=mac.cget("text"))
 
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("C:/Users/Filni1/OneDrive - BuroVirtuel/Bureau/WipeApp/WipeApp/dark_blue.json")
+
 
 #Code base interface.
 root = customtkinter.CTk()
 root.attributes("-fullscreen", True)
-root.configure(bg="#35454F")
-
+root.configure(bg="#708090")
+frame = ttk.Frame(root)
+frame.configure(style="Custom.TFrame")
 #Wipe button
-wipe = customtkinter.CTkButton(root, text="wipe", command=wipe_clicker)
+wipe = customtkinter.CTkButton(root, text="wipe", command=wipe_clicker, height=100, width=1000, hover_color="green", fg_color="#708090", font=("Davish", 20))
 wipe.pack(pady=80)
 
 #MacAddress button
-mac=customtkinter.CTkButton(root,text="Addresse Mac",command=mac_clicker)
+mac=customtkinter.CTkButton(root,text="Addresse Mac",command=mac_clicker, height=100, width=1000, hover_color="green", fg_color="#708090",  font=("Davish", 20))
 mac.pack(pady=80)
 
+#my_label = customtkinter.CTkLabel(root,text="")
+#my_label.pack(pady=80)
 #QuitButton
-quit= customtkinter.CTkButton(master=root, text="Exit", command=root.quit)
+quit= customtkinter.CTkButton(master=root, text="Exit", command=root.quit, height=100, width=1000, hover_color="green", fg_color="#708090", font=("Davish", 20))
 quit.pack(pady=80)
 
 root.mainloop()
