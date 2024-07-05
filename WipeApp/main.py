@@ -80,9 +80,9 @@ root.configure(bg="#010101")
 frame = ttk.Frame(root)
 frame.configure(style="Custom.TFrame")
 frame.pack(fill="both", expand=True, pady=55, padx=55)
-root.bind_all("<Up>", move_focus, lambda e: focus(e))
-root.bind_all("<Down>", move_focus, lambda e: focus(e))
-root.bind_all("<Return>", activate_button, lambda e: focus(e))
+root.bind("<Up>", move_focus, lambda e: focus(e))
+root.bind("<Down>", move_focus, lambda e: focus(e))
+root.bind("<Return>", activate_button, lambda e: focus(e))
 root.bind_all("<Button-1>", lambda e: focus(e))
 # Wipe button
 wipe = customtkinter.CTkButton(frame, text="wipe", command=wipe_clicker, height=100, width=1000, hover_color="#272e34",
@@ -103,7 +103,5 @@ quit.pack(pady=80)
 style = ttk.Style()
 style.configure("Custom.TFrame", background="#708090")
 
-wipe.focus_force()
-wipe.configure(fg_color="#272e34")
-print(root.focus_get())
+
 root.mainloop()
