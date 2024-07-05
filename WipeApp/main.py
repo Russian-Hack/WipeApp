@@ -15,23 +15,24 @@ def wipe_clicker():
 def mac_clicker():
     print("Mac")
 
-
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("C:/Users/Filni1/OneDrive - BuroVirtuel/Bureau/WipeApp/WipeApp/dark_blue.json")
 
 #Code base interface.
-root = tkinter.Tk()
-root.geometry("1920x1080")
+root = customtkinter.CTk()
+root.attributes("-fullscreen", True)
 root.configure(bg="#35454F")
 
 #Wipe button
-wipe = tkinter.Button(root, text="Wipe", command=wipe_clicker)
-wipe.pack()
+wipe = customtkinter.CTkButton(root, text="wipe", command=wipe_clicker)
+wipe.pack(pady=80)
 
 #MacAddress button
-mac=tkinter.Button(root,text="Addresse Mac",command=mac_clicker)
-mac.pack()
+mac=customtkinter.CTkButton(root,text="Addresse Mac",command=mac_clicker)
+mac.pack(pady=80)
 
 #QuitButton
-quit= tkinter.Button(master=root, text="Exit", command=root.quit)
-quit.pack()
+quit= customtkinter.CTkButton(master=root, text="Exit", command=root.quit)
+quit.pack(pady=80)
 
 root.mainloop()
