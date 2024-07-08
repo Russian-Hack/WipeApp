@@ -9,6 +9,9 @@ from tkinter import ttk
 from cProfile import label
 from tkinter.ttk import Style
 from tkinter import Tk, font
+
+
+
 root = tkinter.Tk()
 
 
@@ -78,17 +81,17 @@ root.bind("<Down>", move_focus)
 root.bind("<Return>", activate_button)
 
 # Wipe button
-wipe = tkinter.Button(frame, text="Wipe", command=wipe_clicker(), height=5, width=100, font=('Comfortaa', 14, 'bold'), highlightthickness=0, borderwidth=0)
+wipe = tkinter.Button(frame, text="Wipe", command=wipe_clicker(), height=5, width=100, font=('Comfortaa', 14, 'bold'), highlightthickness=0, borderwidth=0, fg="White")
 # wipe = customtkinter.CTkButton(frame, text="wipe", command=wipe_clicker, height=100, width=1000, hover_color="#272e34",fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
 wipe.pack(pady=(100, 80))
 
 # MacAddress button
-mac = tkinter.Button(frame, text="Mac", command=mac_clicker, height=5, width=100, font=('Comfortaa', 14, 'bold'),  highlightthickness=0, borderwidth=0)
+mac = tkinter.Button(frame, text="Mac", command=mac_clicker, height=5, width=100, font=('Comfortaa', 14, 'bold'),  highlightthickness=0, borderwidth=0, fg="White")
 # mac = customtkinter.CTkButton(frame, text="mac", command=mac_clicker, height=100, width=1000, hover_color="#272e34",   fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
 mac.pack(pady=80)
 
 # QuitButton
-quit = tkinter.Button(frame, text="Exit", command=root.quit, height=5, width=100, font=('Comfortaa', 14, 'bold'),  highlightthickness=0, borderwidth=0)
+quit = tkinter.Button(frame, text="Exit", command=root.quit, height=5, width=100, font=('Comfortaa', 14, 'bold'),  highlightthickness=0, borderwidth=0, fg="White")
 # quit = customtkinter.CTkButton(frame, text="Exit", command=root.quit, height=100, width=1000, hover_color="#272e34",fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
 quit.focus()
 print(root.focus_get())
