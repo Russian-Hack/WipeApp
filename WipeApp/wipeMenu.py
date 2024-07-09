@@ -33,7 +33,3 @@ class wipeMenuClass:
         self.master.bind("<Escape>", quitter)
 
 
-# Main script logic
-if __name__ == "__main__":
-    root = tkinter.Tk()
-    app = wipeMenuClass(root)
