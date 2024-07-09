@@ -4,8 +4,10 @@
 import curses
 
 import tkinter
+
 import customtkinter
 from tkinter import ttk
+from wipeMenu import wipeMenuClass
 from cProfile import label
 from tkinter.ttk import Style
 from tkinter import Tk, font
@@ -56,7 +58,8 @@ def activate_button(event):
 # Actions performed when a button is chosen
 def wipe_clicker():
     print("wipe")
-
+    wipe_menu = wipeMenuClass(root)
+    wipe_menu.setup_gui()
 
 def mac_clicker():
     print("Mac")
@@ -81,7 +84,7 @@ root.bind("<Down>", move_focus)
 root.bind("<Return>", activate_button)
 
 # Wipe button
-wipe = tkinter.Button(frame, text="Wipe", command=wipe_clicker(), height=5, width=100, font=('Comfortaa', 14, 'bold'),
+wipe = tkinter.Button(frame, text="Wipe", command=wipe_clicker, height=5, width=100, font=('Comfortaa', 14, 'bold'),
                       highlightthickness=0, borderwidth=0, fg="White", takefocus=False, bg="#434d57")
 # wipe = customtkinter.CTkButton(frame, text="wipe", command=wipe_clicker, height=100, width=1000, hover_color="#272e34",fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
 wipe.pack(pady=(100, 80))

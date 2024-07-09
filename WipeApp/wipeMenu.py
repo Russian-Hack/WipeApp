@@ -2,30 +2,38 @@ import tkinter
 import customtkinter
 from tkinter import ttk
 
-root = tkinter.Tk()
-style = ttk.Style
-root.attributes("-fullscreen", True)
-frame = ttk.Frame(root)
-frame.configure(style="Custom.TFrame")
-root.configure(bg="#010101")
 
-my_tree = ttk.Treeview(frame)
+class wipeMenuClass:
+    def __init__(self, master):
+        self.master = master
+        self.setup_gui()
 
-my_tree['columns'] =("Name", "Size")
-my_tree.column("#0", width=120)
-my_tree.column("Name", width=20)
-my_tree.column("Size", width=20)
-my_tree.heading("#0", text="Label")
-my_tree.heading("Name", text="Name")
-my_tree.heading("Size", text="Size")
-my_tree.pack(fill="both", expand=True, padx=300, pady=50)
-quit = tkinter.Button(frame, text="Exit", command=root.quit, height=5, width=100, font=('Comfortaa', 14, 'bold'),
-                      highlightthickness=0, borderwidth=0, fg="White", bg="#434d57")
-quit.pack()
+    def setup_gui(self):
+        def quitter(event):
+         self.master.withdraw()
+
+        self.master.attributes('-fullscreen', True)
+        self.master.configure(background="#010101")
+
+        self.frame = ttk.Frame(self.master, style="Custom.TFrame")
+        self.frame.pack(fill="both", expand=True, padx=55, pady=55)
+
+        style = ttk.Style()
+        style.configure("Custom.TFrame", background="#708090")
+
+        self.my_tree = ttk.Treeview(self.frame)
+        self.my_tree['columns'] = ("Size")
+        self.my_tree.column("#0", width=120)
+        self.my_tree.column("Size", width=120)
+        self.my_tree.heading("#0", text="Name")
+        self.my_tree.heading("Size", text="Size")
+        self.my_tree.configure(height=1)
+        self.my_tree.pack(fill="both", expand=True, padx=300, pady=80)
+
+        self.master.bind("<Escape>", quitter)
 
 
-
-style = ttk.Style()
-style.configure("Custom.TFrame", background="#708090")
-frame.pack(fill="both", expand=True, padx=55, pady=55)
-root.mainloop()
+# Main script logic
+if __name__ == "__main__":
+    root = tkinter.Tk()
+    app = wipeMenuClass(root)
