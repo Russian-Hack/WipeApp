@@ -8,9 +8,15 @@ import tkinter
 import customtkinter
 from tkinter import ttk
 from wipeMenu import wipeMenuClass
-
+import uuid
+import psutil
 base = tkinter.Tk()
 
+def print_first_mac_address():
+    for interface_name, addresses in psutil.net_if_addrs().items():
+        for addr in addresses:
+            if addr.family == psutil.AF_LINK:  # Check for MAC address type
+                return addr.address
 
 def move_focus(event):
     if event.keysym == "Up":
@@ -93,14 +99,13 @@ quit.focus()
 
 print(base.focus_get())
 quit.pack(pady=(250,0))
-mac = tkinter.Label(frame, text="Mac", font=('Comfortaa', 14, 'bold'),
-                    highlightthickness=0, borderwidth=0, fg="White", bg="#708090")
+first_mac = print_first_mac_address()
+mac = tkinter.Label(frame, text=f"Mac : {first_mac}", font=('Comfortaa', 18, 'bold'),
+                    highlightthickness=0, borderwidth=0, fg="#434d57")
 mac.configure(width=50)
 
 # mac = customtkinter.CTkButton(frame, text="mac", command=mac_clicker, height=100, width=1000, hover_color="#272e34",   fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
 mac.pack(padx=10, pady=(180, 0))
 
 # Style
-style = ttk.Style()
-style.configure("Custom.TFrame", background="#708090")
 base.mainloop()
