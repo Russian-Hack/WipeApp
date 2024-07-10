@@ -8,9 +8,6 @@ import tkinter
 import customtkinter
 from tkinter import ttk
 from wipeMenu import wipeMenuClass
-from cProfile import label
-from tkinter.ttk import Style
-from tkinter import Tk, font
 
 base = tkinter.Tk()
 
@@ -21,9 +18,9 @@ def move_focus(event):
         thing = base.focus_get()
 
         if thing == quit:
-           wipe.focus()
-           wipe.configure(bg="#2D333A")
-           quit.configure(bg="#434d57")
+            wipe.focus()
+            wipe.configure(bg="#2D333A")
+            quit.configure(bg="#434d57")
 
     elif event.keysym == "Down":
         print("hi")
@@ -32,7 +29,6 @@ def move_focus(event):
             quit.focus()
             quit.configure(bg="#2D333A")
             wipe.configure(bg="#434d57")
-
 
 
 def focus(event):
@@ -55,6 +51,7 @@ def wipe_clicker():
     print("wipe")
     wipe_menu = wipeMenuClass(base)
     wipe_menu.setup_gui()
+
 
 def mac_clicker():
     print("Mac")
@@ -82,7 +79,7 @@ base.bind("<Return>", activate_button)
 wipe = tkinter.Button(frame, text="Wipe", command=wipe_clicker, height=5, width=100, font=('Comfortaa', 14, 'bold'),
                       highlightthickness=0, borderwidth=0, fg="White", takefocus=False, bg="#434d57")
 # wipe = customtkinter.CTkButton(frame, text="wipe", command=wipe_clicker, height=100, width=1000, hover_color="#272e34",fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
-wipe.pack(pady=(100, 80))
+wipe.pack(pady=(250, 0))
 
 # MacAddress button
 
@@ -90,14 +87,19 @@ wipe.pack(pady=(100, 80))
 # QuitButton
 quit = tkinter.Button(frame, text="Exit", command=base.quit, height=5, width=100, font=('Comfortaa', 14, 'bold'),
                       highlightthickness=0, borderwidth=0, fg="White", bg="#434d57")
+
 # quit = customtkinter.CTkButton(frame, text="Exit", command=root.quit, height=100, width=1000, hover_color="#272e34",fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
 quit.focus()
 
 print(base.focus_get())
-quit.pack(pady=80)
-mac = tkinter.Label(frame, text="Mac")
+quit.pack(pady=(250,0))
+mac = tkinter.Label(frame, text="Mac", font=('Comfortaa', 14, 'bold'),
+                    highlightthickness=0, borderwidth=0, fg="White", bg="#708090")
+mac.configure(width=50)
+
 # mac = customtkinter.CTkButton(frame, text="mac", command=mac_clicker, height=100, width=1000, hover_color="#272e34",   fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
-mac.pack()
+mac.pack(padx=10, pady=(180, 0))
+
 # Style
 style = ttk.Style()
 style.configure("Custom.TFrame", background="#708090")
