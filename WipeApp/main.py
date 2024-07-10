@@ -19,25 +19,20 @@ def move_focus(event):
     if event.keysym == "Up":
 
         thing = base.focus_get()
-        if thing == mac:
-            wipe.focus()
-            wipe.configure(bg="#2D333A")
-            mac.configure(bg="#434d57")
-        elif thing == quit:
-            mac.focus()
-            mac.configure(bg="#2D333A")
-            quit.configure(bg="#434d57")
+
+        if thing == quit:
+           wipe.focus()
+           wipe.configure(bg="#2D333A")
+           quit.configure(bg="#434d57")
 
     elif event.keysym == "Down":
+        print("hi")
         thing = base.focus_get()
         if thing == wipe:
-            mac.focus()
-            mac.configure(bg="#2D333A")
-            wipe.configure(bg="#434d57")
-        elif thing == mac:
             quit.focus()
             quit.configure(bg="#2D333A")
-            mac.configure(bg="#434d57")
+            wipe.configure(bg="#434d57")
+
 
 
 def focus(event):
@@ -90,10 +85,7 @@ wipe = tkinter.Button(frame, text="Wipe", command=wipe_clicker, height=5, width=
 wipe.pack(pady=(100, 80))
 
 # MacAddress button
-mac = tkinter.Button(frame, text="Mac", command=mac_clicker, height=5, width=100, font=('Comfortaa', 14, 'bold'),
-                     highlightthickness=0, borderwidth=0, fg="White", takefocus=False, bg="#434d57")
-# mac = customtkinter.CTkButton(frame, text="mac", command=mac_clicker, height=100, width=1000, hover_color="#272e34",   fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
-mac.pack(pady=80)
+
 
 # QuitButton
 quit = tkinter.Button(frame, text="Exit", command=base.quit, height=5, width=100, font=('Comfortaa', 14, 'bold'),
@@ -103,7 +95,9 @@ quit.focus()
 
 print(base.focus_get())
 quit.pack(pady=80)
-
+mac = tkinter.Label(frame, text="Mac")
+# mac = customtkinter.CTkButton(frame, text="mac", command=mac_clicker, height=100, width=1000, hover_color="#272e34",   fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
+mac.pack()
 # Style
 style = ttk.Style()
 style.configure("Custom.TFrame", background="#708090")

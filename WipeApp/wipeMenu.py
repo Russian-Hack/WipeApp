@@ -30,6 +30,7 @@ class wipeMenuClass:
         self.my_tree.heading("Size", text="Size")
         self.my_tree.configure(height=1)
         self.my_tree.pack(fill="both", expand=True, padx=300, pady=80)
+        self.my_tree.focus_set()
 
 
         self.new_window.bind("<Escape>", quitter)
