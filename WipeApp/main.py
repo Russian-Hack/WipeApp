@@ -97,11 +97,12 @@ for j in range(5):  # 5 rows
 base.grid_rowconfigure(0, weight=1)
 frame.configure(style="Custom.TFrame")
 frame.pack(fill="both", expand=True, pady=55, padx=55)
-
+def main_menu_focus(event):
+    quit.focus()
 base.bind("<Up>", move_focus)
 base.bind("<Down>", move_focus)
 base.bind("<Return>", activate_button)
-
+base.bind("<FocusIn>", main_menu_focus)
 # Wipe button
 wipe = tkinter.Button(frame, text="Wipe", command=wipe_clicker, height=5, width=50, font=('Comfortaa', 14, 'bold'),
                       highlightthickness=0, borderwidth=0, fg="White", takefocus=False, bg="#434d57")
