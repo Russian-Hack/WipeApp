@@ -7,6 +7,8 @@ import tkinter
 
 import customtkinter
 from tkinter import ttk
+
+
 from wipeMenu import wipeMenuClass
 import uuid
 import psutil
@@ -27,14 +29,14 @@ def move_focus(event):
         thing = base.focus_get()
 
         if thing == bios:
-           wipe.focus()
-           wipe.configure(bg="#2D333A")
-           bios.configure(bg="#434d57")
+            wipe.focus()
+            wipe.configure(bg="#2D333A")
+            bios.configure(bg="#434d57")
 
         elif thing == quit:
-             bios.focus()
-             bios.configure(bg="#2D333A")
-             quit.configure(bg="#434d57")
+            bios.focus()
+            bios.configure(bg="#2D333A")
+            quit.configure(bg="#434d57")
 
     elif event.keysym == "Down":
         print("hi")
@@ -84,7 +86,7 @@ customtkinter.set_appearance_mode("dark")
 
 base.attributes("-fullscreen", True)
 base.configure(bg="#010101")
-
+style = ttk.Style()
 frame = ttk.Frame(base)
 frame.grid(column=0, row=0, sticky="nsew", padx=10, pady=10)
 for i in range(3):  # 3 columns
@@ -96,6 +98,7 @@ for j in range(5):  # 5 rows
 
 base.grid_rowconfigure(0, weight=1)
 frame.configure(style="Custom.TFrame")
+style.configure("Custom.TFrame", background="#708090")
 frame.pack(fill="both", expand=True, pady=55, padx=55)
 
 base.bind("<Up>", move_focus)
@@ -125,11 +128,11 @@ print(base.focus_get())
 quit.grid(column=1, row=2, sticky="nsew", pady=(0, 50))
 first_mac = print_first_mac_address()
 mac = tkinter.Label(frame, text=f"Mac : {first_mac}", font=('Comfortaa', 18, 'bold'),
-                    highlightthickness=0, borderwidth=0, fg="#434d57")
-mac.configure()
+                    highlightthickness=0, borderwidth=0, fg="#FFFFFF", bg="#708090")
 
 # mac = customtkinter.CTkButton(frame, text="mac", command=mac_clicker, height=100, width=1000, hover_color="#272e34",   fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
 mac.grid(column=0, row=5, sticky="nsew")
 
 # Style
+
 base.mainloop()
