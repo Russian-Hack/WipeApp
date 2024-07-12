@@ -4,6 +4,8 @@ from tkinter import ttk
 
 import psutil
 
+from dialogBox import CustomConfirmation
+
 
 class wipeMenuClass:
     def __init__(self, master, callback=None):
@@ -19,6 +21,8 @@ class wipeMenuClass:
 
     def setup_gui(self):
 
+
+
         def quittera():
             print("hi")
             self.new_window.withdraw()
@@ -27,23 +31,48 @@ class wipeMenuClass:
             if self.callback:
                 self.callback()
 
-        def confirm():
-            print("confirm")
-
         def on_enter_pressed(event):
+            print("hhi")
             selected_item = self.my_tree.selection()[0]
             self.my_tree.tag_configure("selected", background="green")
             self.my_tree.item(selected_item, tags=("selected",))
+            show_confirm_popup()
+            self.unbind_keys()
 
         def navigate_up(event):
             current_index = self.my_tree.index(self.my_tree.selection())
             if current_index > 0:
                 self.my_tree.selection_set(self.my_tree.get_children()[current_index - 1])
 
+        def show_confirm_popup():
+            selected_item = self.my_tree.selection()[0]
+            confirm_message = f"Are you sure you want to wipe {selected_item}?"
+
+            # Define the callback function for confirm action
+            def confirm_action():
+                wipe_selected_item()
+                # Optionally add more logic after confirmation
+
+            # Create an instance of CustomConfirmation
+            confirm_popup = CustomConfirmation(self.new_window, confirm_message, confirm_action, lambda: None)
+
+        def wipe_selected_item():
+            selected_item = self.my_tree.selection()[0]
+            print(f"Wiping {selected_item}")
+
         def navigate_down(event):
             current_index = self.my_tree.index(self.my_tree.selection())
             if current_index < len(self.my_tree.get_children()) - 1:
                 self.my_tree.selection_set(self.my_tree.get_children()[current_index + 1])
+
+        def bind_keys(self):
+            self.master.bind("<Up>", navigate_up)
+
+        self.master.bind("<Down>", navigate_down)
+        self.master.bind("<Return>", on_enter_pressed)
+        self.master.bind("<Escape>", lambda event: quittera())
+
+
 
         self.new_window.attributes('-fullscreen', True)
         self.new_window.configure(background="#010101")
@@ -73,19 +102,9 @@ class wipeMenuClass:
         for col, heading in headings.items():
             self.my_tree.heading(col, text=heading)
 
-        def on_enter_pressed(event):
-            print("hhi")
-            selected_item = self.my_tree.selection()[0]
-            self.my_tree.tag_configure("selected", background="green")
-            self.my_tree.item(selected_item, tags=("selected",))
-
         self.my_tree.grid(column=1, row=1, sticky="nsew", columnspan=8, rowspan=8, padx=(15, 15))
 
         partitions = psutil.disk_partitions()
-        self.master.bind("<Up>", navigate_up)
-        self.master.bind("<Down>", navigate_down)
-        self.master.bind("<Return>", on_enter_pressed)
-        self.master.bind("<Escape>", lambda event: quittera())
 
         for p in partitions:
             named = p.mountpoint

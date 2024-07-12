@@ -46,10 +46,7 @@ def navigate_down(event):
             bios.focus()
             bios.configure(bg="#2D333A")
             wipe.configure(bg="#434d57")
-        elif thing == bios:
-            quit.focus()
-            quit.configure(bg="#2D333A")
-            bios.configure(bg="#434d57")
+
 
 
 def focus(event):
