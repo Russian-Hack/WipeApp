@@ -6,20 +6,30 @@ import psutil
 
 
 class wipeMenuClass:
-    def __init__(self, master):
+    def __init__(self, master, callback=None):
         self.master = master
         self.new_window = tkinter.Toplevel(master)
+        self.callback = callback
+
+    def unbind_keys(self):
+        self.master.unbind("<Up>")
+        self.master.unbind("<Down>")
+        self.master.unbind("<Return>")
+        self.master.unbind("<Escape>")
 
     def setup_gui(self):
 
         def quittera():
             print("hi")
-            self.new_window.focus()
             self.new_window.withdraw()
-
+            self.new_window.focus()
+            self.unbind_keys()
+            if self.callback:
+                self.callback()
 
         def confirm():
             print("confirm")
+
         def on_enter_pressed(event):
             selected_item = self.my_tree.selection()[0]
             self.my_tree.tag_configure("selected", background="green")
@@ -34,6 +44,7 @@ class wipeMenuClass:
             current_index = self.my_tree.index(self.my_tree.selection())
             if current_index < len(self.my_tree.get_children()) - 1:
                 self.my_tree.selection_set(self.my_tree.get_children()[current_index + 1])
+
         self.new_window.attributes('-fullscreen', True)
         self.new_window.configure(background="#010101")
 
@@ -69,15 +80,12 @@ class wipeMenuClass:
             self.my_tree.item(selected_item, tags=("selected",))
 
         self.my_tree.grid(column=1, row=1, sticky="nsew", columnspan=8, rowspan=8, padx=(15, 15))
-        
 
         partitions = psutil.disk_partitions()
         self.master.bind("<Up>", navigate_up)
         self.master.bind("<Down>", navigate_down)
         self.master.bind("<Return>", on_enter_pressed)
-        self.new_window.bind("<Escape>", lambda event : quittera())
-
-
+        self.master.bind("<Escape>", lambda event: quittera())
 
         for p in partitions:
             named = p.mountpoint

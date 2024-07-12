@@ -22,7 +22,7 @@ def print_first_mac_address():
                 return addr.address
 
 
-def move_focus(event):
+def navigate_up(event):
     if event.keysym == "Up":
 
         thing = base.focus_get()
@@ -37,7 +37,9 @@ def move_focus(event):
             bios.configure(bg="#2D333A")
             quit.configure(bg="#434d57")
 
-    elif event.keysym == "Down":
+
+def navigate_down(event):
+    if event.keysym == "Down":
         print("hi")
         thing = base.focus_get()
         if thing == wipe:
@@ -63,19 +65,19 @@ def activate_button(event):
     elif (current_focus == quit):
         base.quit()
 
+def focus_on_wipe_button():
+    wipe.focus
+    base.bind("<Up>", navigate_up)
+    base.bind("<Down>", navigate_down)
+    base.bind("<Return>", activate_button)
 
-# Actions performed when a button is chosen
+
 def wipe_clicker():
-    wipe_menu = wipeMenuClass(base)
+    wipe_menu = wipeMenuClass(base, callback=focus_on_wipe_button)
     wipe_menu.setup_gui()
 
 
-#  my_label.configure(text=mac.cget("text"))
-
 customtkinter.set_appearance_mode("dark")
-
-# Code base interface.
-
 
 base.attributes("-fullscreen", True)
 base.configure(bg="#010101")
@@ -94,27 +96,22 @@ frame.configure(style="Custom.TFrame")
 style.configure("Custom.TFrame", background="#708090")
 frame.pack(fill="both", expand=True, pady=55, padx=55)
 
-base.bind("<Up>", move_focus)
-base.bind("<Down>", move_focus)
+base.bind("<Up>", navigate_up)
+base.bind("<Down>", navigate_down)
 base.bind("<Return>", activate_button)
 
-# Wipe button
 wipe = tkinter.Button(frame, text="Wipe", command=wipe_clicker, height=5, width=50, font=('Comfortaa', 14, 'bold'),
                       highlightthickness=0, borderwidth=0, fg="White", takefocus=False, bg="#434d57")
 
-# wipe = customtkinter.CTkButton(frame, text="wipe", command=wipe_clicker, height=100, width=1000, hover_color="#272e34",fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
 wipe.grid(column=1, row=0, sticky="nsew", pady=(80, 0))
-
-# MacAddress button
 
 bios = tkinter.Button(frame, text="Bios Setup", height=5, width=50, font=('Comfortaa', 14, 'bold'),
                       highlightthickness=0, borderwidth=0, fg="White", bg="#434d57")
 bios.grid(column=1, row=1, sticky="nsew", pady=(80, 80))
-# QuitButton
+
 quit = tkinter.Button(frame, text="Exit", command=base.quit, height=5, width=50, font=('Comfortaa', 14, 'bold'),
                       highlightthickness=0, borderwidth=0, fg="White", bg="#434d57")
 
-# quit = customtkinter.CTkButton(frame, text="Exit", command=root.quit, height=100, width=1000, hover_color="#272e34",fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
 quit.focus()
 
 quit.grid(column=1, row=2, sticky="nsew", pady=(0, 50))
@@ -122,10 +119,8 @@ first_mac = print_first_mac_address()
 mac = tkinter.Label(frame, text=f"Mac : {first_mac}", font=('Comfortaa', 18, 'bold'),
                     highlightthickness=0, borderwidth=0, fg="#FFFFFF", bg="#708090")
 
-# mac = customtkinter.CTkButton(frame, text="mac", command=mac_clicker, height=100, width=1000, hover_color="#272e34",   fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
 mac.grid(column=0, row=5, sticky="nsew")
 
-# Style
 try:
     base.mainloop()
 except KeyboardInterrupt:
