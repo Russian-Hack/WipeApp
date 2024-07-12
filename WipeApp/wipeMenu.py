@@ -11,15 +11,29 @@ class wipeMenuClass:
         self.new_window = tkinter.Toplevel(master)
 
     def setup_gui(self):
-        def quitter(event):
-            self.new_window.withdraw()
 
         def quittera():
+            print("hi")
+            self.new_window.focus()
             self.new_window.withdraw()
+
 
         def confirm():
             print("confirm")
+        def on_enter_pressed(event):
+            selected_item = self.my_tree.selection()[0]
+            self.my_tree.tag_configure("selected", background="green")
+            self.my_tree.item(selected_item, tags=("selected",))
 
+        def navigate_up(event):
+            current_index = self.my_tree.index(self.my_tree.selection())
+            if current_index > 0:
+                self.my_tree.selection_set(self.my_tree.get_children()[current_index - 1])
+
+        def navigate_down(event):
+            current_index = self.my_tree.index(self.my_tree.selection())
+            if current_index < len(self.my_tree.get_children()) - 1:
+                self.my_tree.selection_set(self.my_tree.get_children()[current_index + 1])
         self.new_window.attributes('-fullscreen', True)
         self.new_window.configure(background="#010101")
 
@@ -49,31 +63,21 @@ class wipeMenuClass:
             self.my_tree.heading(col, text=heading)
 
         def on_enter_pressed(event):
+            print("hhi")
             selected_item = self.my_tree.selection()[0]
             self.my_tree.tag_configure("selected", background="green")
             self.my_tree.item(selected_item, tags=("selected",))
 
-        self.my_tree.grid(column=1, row=1, sticky="nsew", columnspan=4, rowspan=8, padx=(15, 15))
-        self.my_tree.focus_set()
+        self.my_tree.grid(column=1, row=1, sticky="nsew", columnspan=8, rowspan=8, padx=(15, 15))
+        
 
-        self.acceptButton = tkinter.Button(self.frame, height=1, width=30
-                                           , text="Confirm Wipe", command=confirm, font=('Comfortaa', 14, 'bold'),
-                                           highlightthickness=0, borderwidth=0, fg="White", bg="#434d57")
-
-        self.exitButton = tkinter.Button(self.frame, height=1, width=30
-                                         , text="Exit", command=quittera, font=('Comfortaa', 14, 'bold'),
-                                         highlightthickness=0, borderwidth=0, fg="White", bg="#434d57")
-        self.acceptButton.grid(column=7, row=4, sticky="nsew", columnspan=1, rowspan=1, padx=(15, 15))
-        self.exitButton.grid(column=7, row=8, sticky="nsew", columnspan=1, rowspan=1, padx=(15, 15))
         partitions = psutil.disk_partitions()
-        self.master.bind("<Up>", lambda event: self.navigate_treeview(-1))
-        self.master.bind("<Down>", lambda event: self.navigate_treeview(1))
+        self.master.bind("<Up>", navigate_up)
+        self.master.bind("<Down>", navigate_down)
         self.master.bind("<Return>", on_enter_pressed)
+        self.new_window.bind("<Escape>", lambda event : quittera())
 
-        def navigate_treeview(args):
-            global i
-            i = self.my_tree.selection()[0]
-            print(i)
+
 
         for p in partitions:
             named = p.mountpoint
@@ -82,5 +86,7 @@ class wipeMenuClass:
             sized_rounded = round(sized, 2)
 
             self.my_tree.insert("", "end", values=(named, f"{sized_rounded} GB"))
-        self.my_tree.bind("<<TreeviewSelect>>", navigate_treeview)
-        self.my_tree.focus()
+        self.my_tree.bind("<<TreeviewSelect>>", lambda event: print(event))
+        self.my_tree.selection_set(self.my_tree.get_children()[0])
+
+        print(self.frame.focus_get())

@@ -8,7 +8,6 @@ import tkinter
 import customtkinter
 from tkinter import ttk
 
-
 from wipeMenu import wipeMenuClass
 import uuid
 import psutil
@@ -60,21 +59,15 @@ def activate_button(event):
     current_focus = base.focus_get()
     if (current_focus == wipe):
         wipe_clicker()
-    elif (current_focus == mac):
-        mac_clicker()
+
     elif (current_focus == quit):
         base.quit()
 
 
 # Actions performed when a button is chosen
 def wipe_clicker():
-    print("wipe")
     wipe_menu = wipeMenuClass(base)
     wipe_menu.setup_gui()
-
-
-def mac_clicker():
-    print("Mac")
 
 
 #  my_label.configure(text=mac.cget("text"))
@@ -124,7 +117,6 @@ quit = tkinter.Button(frame, text="Exit", command=base.quit, height=5, width=50,
 # quit = customtkinter.CTkButton(frame, text="Exit", command=root.quit, height=100, width=1000, hover_color="#272e34",fg_color="#434d57", font=("Davish", 20), bg_color="#708090")
 quit.focus()
 
-print(base.focus_get())
 quit.grid(column=1, row=2, sticky="nsew", pady=(0, 50))
 first_mac = print_first_mac_address()
 mac = tkinter.Label(frame, text=f"Mac : {first_mac}", font=('Comfortaa', 18, 'bold'),
@@ -134,5 +126,7 @@ mac = tkinter.Label(frame, text=f"Mac : {first_mac}", font=('Comfortaa', 18, 'bo
 mac.grid(column=0, row=5, sticky="nsew")
 
 # Style
-
-base.mainloop()
+try:
+    base.mainloop()
+except KeyboardInterrupt:
+    print("Keyboard Interrupt")
