@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+
 class CustomConfirmation:
     def __init__(self, master, message, callback_confirm, callback_cancel):
         self.master = master
@@ -35,11 +36,12 @@ class CustomConfirmation:
 
         self.top.bind("<Up>", self.navigate_up)
         self.top.bind("<Down>", self.navigate_down)
-        self.top.bind("<Enter>", self.activate_button)
+        self.top.bind("<Return>", self.activate_button)
 
         self.frame.pack(fill="both", expand=True, padx=15, pady=15)
         self.button_cancel.focus_set()  # Set initial focus to Cancel button
         self.button_cancel.configure(bg="#2D333A")
+
     def navigate_up(self, event):
         thing = self.top.focus_get()
         if thing == self.button_cancel:
@@ -54,21 +56,17 @@ class CustomConfirmation:
             self.button_cancel.configure(bg="#2D333A")
             self.button_confirm.configure(bg="#434d57")
 
-
-
     def confirm(self):
         print("down")
-        self.top.destroy()
+        self.top.withdraw()
         if self.callback_confirm:
             self.callback_confirm()
 
-
     def cancel(self):
         print("up")
-        self.top.destroy()
+        self.top.withdraw()
         if self.callback_cancel:
             self.callback_cancel()
-
 
     def activate_button(self, event):
         current_focus = self.top.focus_get()

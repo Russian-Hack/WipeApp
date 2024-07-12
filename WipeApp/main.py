@@ -48,7 +48,6 @@ def navigate_down(event):
             wipe.configure(bg="#434d57")
 
 
-
 def focus(event):
     widget = base.focus_get()
     print(widget, "has focus")
@@ -61,6 +60,7 @@ def activate_button(event):
 
     elif (current_focus == quit):
         base.quit()
+
 
 def focus_on_wipe_button():
     wipe.focus

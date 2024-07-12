@@ -21,8 +21,6 @@ class wipeMenuClass:
 
     def setup_gui(self):
 
-
-
         def quittera():
             print("hi")
             self.new_window.withdraw()
@@ -71,8 +69,6 @@ class wipeMenuClass:
         self.master.bind("<Down>", navigate_down)
         self.master.bind("<Return>", on_enter_pressed)
         self.master.bind("<Escape>", lambda event: quittera())
-
-
 
         self.new_window.attributes('-fullscreen', True)
         self.new_window.configure(background="#010101")
