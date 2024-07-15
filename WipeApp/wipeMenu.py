@@ -35,7 +35,7 @@ class wipeMenuClass:
             self.my_tree.tag_configure("selected", background="green")
             self.my_tree.item(selected_item, tags=("selected",))
             show_confirm_popup()
-            self.unbind_keys()
+
 
         def navigate_up(event):
             current_index = self.my_tree.index(self.my_tree.selection())
@@ -49,7 +49,14 @@ class wipeMenuClass:
             # Define the callback function for confirm action
             def confirm_action():
                 wipe_selected_item()
-                # Optionally add more logic after confirmation
+            self.new_window.deiconify()  # Show the main window again
+            self.new_window.focus_set()
+            self.my_tree.focus_set()
+            self.my_tree.selection_set(self.my_tree.get_children()[0])
+            bind_keys(self)
+
+
+        # Optionally add more logic after confirmation
 
             # Create an instance of CustomConfirmation
             confirm_popup = CustomConfirmation(self.new_window, confirm_message, confirm_action, lambda: None)
@@ -62,10 +69,13 @@ class wipeMenuClass:
             current_index = self.my_tree.index(self.my_tree.selection())
             if current_index < len(self.my_tree.get_children()) - 1:
                 self.my_tree.selection_set(self.my_tree.get_children()[current_index + 1])
-
         def bind_keys(self):
             self.master.bind("<Up>", navigate_up)
+            self.master.bind("<Down>", navigate_down)
+            self.master.bind("<Return>", on_enter_pressed)
+            self.master.bind("<Escape>", lambda event: quittera())
 
+        self.master.bind("<Up>", navigate_up)
         self.master.bind("<Down>", navigate_down)
         self.master.bind("<Return>", on_enter_pressed)
         self.master.bind("<Escape>", lambda event: quittera())
