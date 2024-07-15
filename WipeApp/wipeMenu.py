@@ -3,7 +3,7 @@ import customtkinter
 from tkinter import ttk
 
 import psutil
-
+from wipeLogic import WipeLogic
 from dialogBox import CustomConfirmation
 
 
@@ -32,9 +32,16 @@ class wipeMenuClass:
         def on_enter_pressed(event):
             print("hhi")
             selected_item = self.my_tree.selection()[0]
-            self.my_tree.tag_configure("selected", background="green")
-            self.my_tree.item(selected_item, tags=("selected",))
-            show_confirm_popup()
+            name = self.my_tree.item(selected_item)['values'][0]
+            print(name)
+
+            if name=="Z:":
+                return
+            else:
+                self.my_tree.tag_configure("selected", background="green")
+                self.my_tree.item(selected_item, tags=("selected",))
+                show_confirm_popup()
+
 
 
         def navigate_up(event):
@@ -54,6 +61,7 @@ class wipeMenuClass:
                 bind_keys(self)
                 self.my_tree.focus_set()
                 self.my_tree.selection_set(self.my_tree.get_children()[0])
+
             def cancel_action():
                 self.new_window.deiconify()  # Show the main window again
                 self.new_window.focus_set()
@@ -61,21 +69,25 @@ class wipeMenuClass:
                 self.my_tree.focus_set()
                 self.my_tree.selection_set(self.my_tree.get_children()[0])
 
-
-
-        # Optionally add more logic after confirmation
+            # Optionally add more logic after confirmation
 
             # Create an instance of CustomConfirmation
             confirm_popup = CustomConfirmation(self.new_window, confirm_message, confirm_action, cancel_action)
 
         def wipe_selected_item():
             selected_item = self.my_tree.selection()[0]
+            size = self.my_tree.item(selected_item)['values'][1]
+            size2 = size.replace(" GB", '')
+            print(size2)
+            wiper = WipeLogic(selected_item, size2)
+            wiper.wipe_drive()
             print(f"Wiping {selected_item}")
 
         def navigate_down(event):
             current_index = self.my_tree.index(self.my_tree.selection())
             if current_index < len(self.my_tree.get_children()) - 1:
                 self.my_tree.selection_set(self.my_tree.get_children()[current_index + 1])
+
         def bind_keys(self):
             self.my_tree.bind("<Up>", navigate_up)
             self.my_tree.bind("<Down>", navigate_down)
@@ -120,12 +132,13 @@ class wipeMenuClass:
         partitions = psutil.disk_partitions()
 
         for p in partitions:
-            named = p.mountpoint
+            named = p.mountpoint+ "."
+            named_2 = named.replace('\.', '')
             sized = (psutil.disk_usage(p.mountpoint).total) / 1000000000
 
             sized_rounded = round(sized, 2)
 
-            self.my_tree.insert("", "end", values=(named, f"{sized_rounded} GB"))
+            self.my_tree.insert("", "end", values=(named_2, f"{sized_rounded} GB"))
         self.my_tree.bind("<<TreeviewSelect>>", lambda event: print(event))
         self.my_tree.selection_set(self.my_tree.get_children()[0])
 

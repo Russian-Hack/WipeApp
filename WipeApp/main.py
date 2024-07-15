@@ -7,9 +7,8 @@ import tkinter
 
 import customtkinter
 from tkinter import ttk
-
 from wipeMenu import wipeMenuClass
-import uuid
+
 import psutil
 
 base = tkinter.Tk()
@@ -78,7 +77,7 @@ def wipe_clicker():
     wipe_menu.setup_gui()
 
 
-customtkinter.set_appearance_mode("dark")
+
 
 base.attributes("-fullscreen", True)
 base.configure(bg="#010101")
