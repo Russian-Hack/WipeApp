@@ -49,17 +49,24 @@ class wipeMenuClass:
             # Define the callback function for confirm action
             def confirm_action():
                 wipe_selected_item()
-            self.new_window.deiconify()  # Show the main window again
-            self.new_window.focus_set()
-            self.my_tree.focus_set()
-            self.my_tree.selection_set(self.my_tree.get_children()[0])
-            bind_keys(self)
+                self.new_window.deiconify()  # Show the main window again
+                self.new_window.focus_set()
+                bind_keys(self)
+                self.my_tree.focus_set()
+                self.my_tree.selection_set(self.my_tree.get_children()[0])
+            def cancel_action():
+                self.new_window.deiconify()  # Show the main window again
+                self.new_window.focus_set()
+                bind_keys(self)
+                self.my_tree.focus_set()
+                self.my_tree.selection_set(self.my_tree.get_children()[0])
+
 
 
         # Optionally add more logic after confirmation
 
             # Create an instance of CustomConfirmation
-            confirm_popup = CustomConfirmation(self.new_window, confirm_message, confirm_action, lambda: None)
+            confirm_popup = CustomConfirmation(self.new_window, confirm_message, confirm_action, cancel_action)
 
         def wipe_selected_item():
             selected_item = self.my_tree.selection()[0]
@@ -70,10 +77,10 @@ class wipeMenuClass:
             if current_index < len(self.my_tree.get_children()) - 1:
                 self.my_tree.selection_set(self.my_tree.get_children()[current_index + 1])
         def bind_keys(self):
-            self.master.bind("<Up>", navigate_up)
-            self.master.bind("<Down>", navigate_down)
-            self.master.bind("<Return>", on_enter_pressed)
-            self.master.bind("<Escape>", lambda event: quittera())
+            self.my_tree.bind("<Up>", navigate_up)
+            self.my_tree.bind("<Down>", navigate_down)
+            self.my_tree.bind("<Return>", on_enter_pressed)
+            self.my_tree.bind("<Escape>", lambda event: quittera())
 
         self.master.bind("<Up>", navigate_up)
         self.master.bind("<Down>", navigate_down)
