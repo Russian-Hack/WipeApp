@@ -92,11 +92,11 @@ class wipeMenuClass:
             self.my_tree.bind("<Down>", navigate_down)
             self.my_tree.bind("<Return>", on_enter_pressed)
             self.my_tree.bind("<Escape>", lambda event: quittera())
-
         self.master.bind("<Up>", navigate_up)
         self.master.bind("<Down>", navigate_down)
         self.master.bind("<Return>", on_enter_pressed)
         self.master.bind("<Escape>", lambda event: quittera())
+
 
         self.new_window.attributes('-fullscreen', True)
         self.new_window.configure(background="#010101")
@@ -127,8 +127,11 @@ class wipeMenuClass:
             self.my_tree.heading(col, text=heading)
 
         self.my_tree.grid(column=1, row=1, sticky="nsew", columnspan=8, rowspan=8, padx=(15, 15))
-
-        partitions = psutil.disk_partitions()
+        self.my_tree.bind("<Up>", navigate_up)
+        self.my_tree.bind("<Down>", navigate_down)
+        self.my_tree.bind("<Return>", on_enter_pressed)
+        self.my_tree.bind("<Escape>", lambda event: quittera())
+        partitions = psutil.disk_partitions(all=False)
 
         for p in partitions:
             named = p.mountpoint+ "."

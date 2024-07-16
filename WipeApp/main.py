@@ -2,6 +2,7 @@
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
 import curses
+import subprocess
 
 import tkinter
 
@@ -15,10 +16,16 @@ base = tkinter.Tk()
 
 
 def print_first_mac_address():
-    for interface_name, addresses in psutil.net_if_addrs().items():
-        for addr in addresses:
-            if addr.family == psutil.AF_LINK:  # Check for MAC address type
-                return addr.address
+    try:
+        output = subprocess.check_output(['ifconfig']).decode('utf-8')
+        lines = output.split('\n')
+        for line in lines:
+            if 'HWaddr' in line:  # Look for the line containing 'HWaddr' (MAC address line)
+                parts = line.strip().split()
+                return parts[-1]  # Last part should be the MAC address
+    except subprocess.CalledProcessError as e:
+        print(f"Error running ifconfig: {e}")
+    return None
 
 
 def navigate_up(event):
@@ -105,7 +112,7 @@ wipe = tkinter.Button(frame, text="Wipe", command=wipe_clicker, height=5, width=
 
 wipe.grid(column=1, row=0, sticky="nsew", pady=(80, 0))
 
-bios = tkinter.Button(frame, text="Bios Setup", height=5, width=50, font=('Comfortaa', 14, 'bold'),
+bios = tkinter.Button(frame, text="", height=5, width=50, font=('Comfortaa', 14, 'bold'),
                       highlightthickness=0, borderwidth=0, fg="White", bg="#434d57")
 bios.grid(column=1, row=1, sticky="nsew", pady=(80, 80))
 
