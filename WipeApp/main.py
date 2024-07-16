@@ -20,9 +20,12 @@ def print_first_mac_address():
         output = subprocess.check_output(['ifconfig']).decode('utf-8')
         lines = output.split('\n')
         for line in lines:
-            if 'HWaddr' in line:  # Look for the line containing 'HWaddr' (MAC address line)
+            if 'ether' in line:  # Look for the line containing 'ether' (MAC address line)
                 parts = line.strip().split()
-                return parts[-1]  # Last part should be the MAC address
+                mac_address_index = parts.index('ether') + 1
+                macDesing = parts[mac_address_index]
+                macDesing.upper()
+                return macDesing  # Return the MAC address found
     except subprocess.CalledProcessError as e:
         print(f"Error running ifconfig: {e}")
     return None
@@ -123,7 +126,8 @@ quit.focus()
 
 quit.grid(column=1, row=2, sticky="nsew", pady=(0, 50))
 first_mac = print_first_mac_address()
-mac = tkinter.Label(frame, text=f"Mac : {first_mac}", font=('Comfortaa', 18, 'bold'),
+first_mac2 = first_mac.upper()
+mac = tkinter.Label(frame, text=f"Mac : {first_mac2}", font=('Comfortaa', 18, 'bold'),
                     highlightthickness=0, borderwidth=0, fg="#FFFFFF", bg="#708090")
 
 mac.grid(column=0, row=5, sticky="nsew")

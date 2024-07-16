@@ -1,3 +1,4 @@
+import subprocess
 import tkinter
 from tkinter import ttk
 
@@ -33,13 +34,9 @@ class wipeMenuClass:
             selected_item = self.my_tree.selection()[0]
             name = self.my_tree.item(selected_item)['values'][0]
             print(name)
-
-            if name=="Z:":
-                return
-            else:
-                self.my_tree.tag_configure("selected", background="green")
-                self.my_tree.item(selected_item, tags=("selected",))
-                show_confirm_popup()
+            self.my_tree.tag_configure("selected", background="green")
+            self.my_tree.item(selected_item, tags=("selected",))
+            show_confirm_popup()
 
 
 
@@ -78,7 +75,7 @@ class wipeMenuClass:
             size = self.my_tree.item(selected_item)['values'][1]
             size2 = size.replace(" GB", '')
             print(size2)
-            wiper = WipeLogic(selected_item, size2)
+            wiper = WipeLogic(selected_item)
             wiper.wipe_drive()
             print(f"Wiping {selected_item}")
 
@@ -131,16 +128,31 @@ class wipeMenuClass:
         self.my_tree.bind("<Down>", navigate_down)
         self.my_tree.bind("<Return>", on_enter_pressed)
         self.my_tree.bind("<Escape>", lambda event: quittera())
-        partitions = psutil.disk_partitions(all=False)
+        try:
+            findmnt_output = subprocess.check_output(['findmnt', '-lo', 'SOURCE,TARGET']).decode('utf-8').strip()
+            mounts_info = findmnt_output.split('\n')
+            for mount_info in mounts_info[1:]:  # Skip header line
+                fields = mount_info.split()
+                if len(fields) >= 2:
+                    source = fields[0]
+                    target = fields[1]
+                    # Filter for only internal drives and USB keys
+                    if '/dev/sd' in source or '/dev/nvme' in source or '/dev/disk/by-id/usb' in source:
+                        try:
+                            df_output = subprocess.check_output(['df', '-hP', target]).decode('utf-8').strip().split('\n')[1].split()
+                            total_size = df_output[1] if len(df_output) > 1 else ""
+                            self.my_tree.insert("", "end", values=(source, total_size))
+                        except subprocess.CalledProcessError as e:
+                            print(f"Error executing df command for {target}: {e}")
+                        except Exception as e:
+                            print(f"Unexpected error retrieving disk information for {target}: {e}")
+        except subprocess.CalledProcessError as e:
+            print(f"Error executing findmnt command: {e}")
+        except Exception as e:
+            print(f"Unexpected error retrieving disk information: {e}")
 
-        for p in partitions:
-            named = p.mountpoint+ "."
-            named_2 = named.replace('\.', '')
-            sized = (psutil.disk_usage(p.mountpoint).total) / 1000000000
+        self.my_tree.selection_set(self.my_tree.get_children()[0])
 
-            sized_rounded = round(sized, 2)
-
-            self.my_tree.insert("", "end", values=(named_2, f"{sized_rounded} GB"))
         self.my_tree.bind("<<TreeviewSelect>>", lambda event: print(event))
         self.my_tree.selection_set(self.my_tree.get_children()[0])
 
