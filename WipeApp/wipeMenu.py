@@ -30,54 +30,44 @@ class wipeMenuClass:
                 self.callback()
 
         def on_enter_pressed(event):
-            print("hhi")
             selected_item = self.my_tree.selection()[0]
-            name = self.my_tree.item(selected_item)['values'][0]
-            print(name)
-            self.my_tree.tag_configure("selected", background="green")
+            selected_drive = self.my_tree.item(selected_item)['values'][0]  # Assuming first column is device path
             self.my_tree.item(selected_item, tags=("selected",))
-            show_confirm_popup()
-
-
+            show_confirm_popup(selected_drive)
 
         def navigate_up(event):
             current_index = self.my_tree.index(self.my_tree.selection())
             if current_index > 0:
                 self.my_tree.selection_set(self.my_tree.get_children()[current_index - 1])
 
-        def show_confirm_popup():
-            selected_item = self.my_tree.selection()[0]
-            confirm_message = f"Are you sure you want to wipe {selected_item}?"
+        def show_confirm_popup(selected_drive):
+            confirm_message = f"Are you sure you want to wipe {selected_drive}?"
 
-            # Define the callback function for confirm action
             def confirm_action():
-                wipe_selected_item()
-                self.new_window.deiconify()  # Show the main window again
+                wipe_selected_item(selected_drive)
+                self.new_window.deiconify()
                 self.new_window.focus_set()
                 bind_keys(self)
                 self.my_tree.focus_set()
                 self.my_tree.selection_set(self.my_tree.get_children()[0])
 
             def cancel_action():
-                self.new_window.deiconify()  # Show the main window again
+                self.new_window.deiconify()
                 self.new_window.focus_set()
                 bind_keys(self)
                 self.my_tree.focus_set()
                 self.my_tree.selection_set(self.my_tree.get_children()[0])
+
 
             # Optionally add more logic after confirmation
 
             # Create an instance of CustomConfirmation
             confirm_popup = CustomConfirmation(self.new_window, confirm_message, confirm_action, cancel_action)
 
-        def wipe_selected_item():
-            selected_item = self.my_tree.selection()[0]
-            size = self.my_tree.item(selected_item)['values'][1]
-            size2 = size.replace(" GB", '')
-            print(size2)
-            wiper = WipeLogic(selected_item)
+        def wipe_selected_item(selected_drive):
+            wiper = WipeLogic(selected_drive)
             wiper.wipe_drive()
-            print(f"Wiping {selected_item}")
+            print(f"Wiping {selected_drive}")
 
         def navigate_down(event):
             current_index = self.my_tree.index(self.my_tree.selection())
@@ -89,11 +79,11 @@ class wipeMenuClass:
             self.my_tree.bind("<Down>", navigate_down)
             self.my_tree.bind("<Return>", on_enter_pressed)
             self.my_tree.bind("<Escape>", lambda event: quittera())
+
         self.master.bind("<Up>", navigate_up)
         self.master.bind("<Down>", navigate_down)
         self.master.bind("<Return>", on_enter_pressed)
         self.master.bind("<Escape>", lambda event: quittera())
-
 
         self.new_window.attributes('-fullscreen', True)
         self.new_window.configure(background="#010101")
@@ -129,27 +119,25 @@ class wipeMenuClass:
         self.my_tree.bind("<Return>", on_enter_pressed)
         self.my_tree.bind("<Escape>", lambda event: quittera())
         try:
-            findmnt_output = subprocess.check_output(['findmnt', '-lo', 'SOURCE,TARGET']).decode('utf-8').strip()
-            mounts_info = findmnt_output.split('\n')
-            for mount_info in mounts_info[1:]:  # Skip header line
-                fields = mount_info.split()
+            # Example using lsblk to list all block devices, adjust filtering as needed
+            lsblk_output = subprocess.check_output(['lsblk', '-o', 'NAME,SIZE', '-n', '-l', '-p']).decode(
+                'utf-8').strip()
+            devices_info = lsblk_output.split('\n')
+
+            for device_info in devices_info:
+                fields = device_info.split()
                 if len(fields) >= 2:
-                    source = fields[0]
-                    target = fields[1]
-                    # Filter for only internal drives and USB keys
-                    if '/dev/sd' in source or '/dev/nvme' in source or '/dev/disk/by-id/usb' in source:
-                        try:
-                            df_output = subprocess.check_output(['df', '-hP', target]).decode('utf-8').strip().split('\n')[1].split()
-                            total_size = df_output[1] if len(df_output) > 1 else ""
-                            self.my_tree.insert("", "end", values=(source, total_size))
-                        except subprocess.CalledProcessError as e:
-                            print(f"Error executing df command for {target}: {e}")
-                        except Exception as e:
-                            print(f"Unexpected error retrieving disk information for {target}: {e}")
+                    device_name = fields[0]
+                    device_size = fields[1]
+                    # Example filter: include only devices starting with /dev/sd, /dev/nvme, or /dev/disk/by-id/usb
+                    if device_name.startswith('/dev/sd') or device_name.startswith(
+                            '/dev/nvme') or '/dev/disk/by-id/usb' in device_name:
+                        self.my_tree.insert("", "end", values=(device_name, device_size))
+
         except subprocess.CalledProcessError as e:
-            print(f"Error executing findmnt command: {e}")
+            print(f"Error executing lsblk command: {e}")
         except Exception as e:
-            print(f"Unexpected error retrieving disk information: {e}")
+            print(f"Unexpected error retrieving device information: {e}")
 
         self.my_tree.selection_set(self.my_tree.get_children()[0])
 
