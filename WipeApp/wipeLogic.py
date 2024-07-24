@@ -2,7 +2,7 @@ import subprocess
 import threading
 import tkinter as tk
 from tkinter import messagebox
-
+import os
 
 class WipeLogic:
     def __init__(self, selected_drive):
@@ -41,14 +41,18 @@ class WipeLogic:
             passphrase_file = '/tmp/passphrase_file'
             with open(passphrase_file, 'wb') as f:
                 f.write(passphrase)
-
+            mount_point = '/mnt/MYLUKS'
+            try:
+                subprocess.run(['sudo', 'mkdir', '-p', mount_point])
+            except subprocess.CalledProcessError as e:
+                print(f"Error creating directory: {e}")
             cryptsetup_command = ['sudo', 'cryptsetup', 'luksFormat', '--type', 'luks2', '--batch-mode', '--key-file',
-                                  passphrase_file, self.selected_drive]
+                                  passphrase_file, '--label', 'MYLUKS', self.selected_drive]
 
             subprocess.run(cryptsetup_command, check=True)
-
+            subprocess.run(['sudo', 'cryptsetup', 'luksOpen', '--key-file', passphrase_file, self.selected_drive, 'MYLUKS'], check=True)
             # Close the LUKS volume
-            subprocess.run(['sudo', 'cryptsetup', 'luksClose', '--batch-mode', 'ENCRYPTED'], check=True)
+            subprocess.run(['sudo', 'cryptsetup', 'luksClose', '--batch-mode', 'MYLUKS'], check=True)
 
             # Format again to ensure data is securely wiped
             subprocess.run(['sudo', 'mkfs.ext4', '-F', self.selected_drive], check=True)
@@ -60,8 +64,7 @@ class WipeLogic:
                     proc.kill()
                     outs, errs = proc.communicate()
 
-            # Mount the drive back (if needed)
-            mount_point = '/mnt/myluks'
+
             subprocess.run(['sudo', 'mount', self.selected_drive, mount_point], check=True)
 
             # Show completion message
