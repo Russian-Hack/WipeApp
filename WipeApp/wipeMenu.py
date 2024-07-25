@@ -12,15 +12,15 @@ class wipeMenuClass:
         self.master = master
         self.new_window = tkinter.Toplevel(master)
         self.callback = callback
-
+    #Unbinds all the key from the WipeMenu on exit
     def unbind_keys(self):
         self.master.unbind("<Up>")
         self.master.unbind("<Down>")
         self.master.unbind("<Return>")
         self.master.unbind("<Escape>")
-
+    #Sets up the interface and the other functions of the menu
     def setup_gui(self):
-
+        #Closes the wipeMenu
         def quittera():
             print("hi")
             self.new_window.withdraw()
@@ -28,21 +28,21 @@ class wipeMenuClass:
             self.unbind_keys()
             if self.callback:
                 self.callback()
-
+        #Creates an action for when you choose a drive. It creates a confirm popup
         def on_enter_pressed(event):
             selected_item = self.my_tree.selection()[0]
             selected_drive = self.my_tree.item(selected_item)['values'][0]  # Assuming first column is device path
             self.my_tree.item(selected_item, tags=("selected",))
             show_confirm_popup(selected_drive)
-
+        #To navigate up between drives
         def navigate_up(event):
             current_index = self.my_tree.index(self.my_tree.selection())
             if current_index > 0:
                 self.my_tree.selection_set(self.my_tree.get_children()[current_index - 1])
-
+        #The confirm popup
         def show_confirm_popup(selected_drive):
             confirm_message = f"Are you sure you want to wipe {selected_drive}?"
-
+            #What happens when you press confirm in the popup (starts the wipe)
             def confirm_action():
                 wipe_selected_item(selected_drive)
                 self.new_window.deiconify()
@@ -50,7 +50,7 @@ class wipeMenuClass:
                 bind_keys(self)
                 self.my_tree.focus_set()
                 self.my_tree.selection_set(self.my_tree.get_children()[0])
-
+            #Closes the popup menu without performing any other action
             def cancel_action():
                 self.new_window.deiconify()
                 self.new_window.focus_set()
@@ -59,11 +59,9 @@ class wipeMenuClass:
                 self.my_tree.selection_set(self.my_tree.get_children()[0])
 
 
-            # Optionally add more logic after confirmation
 
-            # Create an instance of CustomConfirmation
-            confirm_popup = CustomConfirmation(self.new_window, confirm_message, confirm_action, cancel_action)
-
+            #confirm_popup = CustomConfirmation(self.new_window, confirm_message, confirm_action, cancel_action)
+        
         def wipe_selected_item(selected_drive):
             wiper = WipeLogic(selected_drive)
             wiper.wipe_drive()
