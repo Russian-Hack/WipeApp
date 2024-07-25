@@ -19,10 +19,17 @@ class WipeLogic:
         except subprocess.CalledProcessError:
             return False
 
-    def _wipe_thread(self):
+    def _unmount_drive(self):
         try:
             if self.is_mounted(self.selected_drive):
                 subprocess.run(['sudo', 'umount', self.selected_drive], check=True)
+        except subprocess.CalledProcessError as e:
+            messagebox.showerror("Error", f"Failed to unmount {self.selected_drive}: {e}")
+
+    def _wipe_thread(self):
+        try:
+            # Attempt to unmount the drive if it's already mounted
+            self._unmount_drive()
 
             # Perform wiping operations
             mkfs_command = ['sudo', 'mkfs.ext4', '-F', self.selected_drive]
@@ -41,18 +48,25 @@ class WipeLogic:
             passphrase_file = '/tmp/passphrase_file'
             with open(passphrase_file, 'wb') as f:
                 f.write(passphrase)
+
+            # Ensure the device is unmounted before LUKS operations
+            self._unmount_drive()
+
+            # Create a mount point if it doesn't exist
             mount_point = '/mnt/MYLUKS'
             try:
                 subprocess.run(['sudo', 'mkdir', '-p', mount_point])
             except subprocess.CalledProcessError as e:
                 print(f"Error creating directory: {e}")
+
+            # Format the device with LUKS encryption
             cryptsetup_command = ['sudo', 'cryptsetup', 'luksFormat', '--type', 'luks2', '--batch-mode', '--key-file',
                                   passphrase_file, '--label', 'MYLUKS', self.selected_drive]
 
             subprocess.run(cryptsetup_command, check=True)
+
+            # Open the LUKS volume
             subprocess.run(['sudo', 'cryptsetup', 'luksOpen', '--key-file', passphrase_file, self.selected_drive, 'MYLUKS'], check=True)
-            # Close the LUKS volume
-            subprocess.run(['sudo', 'cryptsetup', 'luksClose', '--batch-mode', 'MYLUKS'], check=True)
 
             # Format again to ensure data is securely wiped
             subprocess.run(['sudo', 'mkfs.ext4', '-F', self.selected_drive], check=True)
@@ -64,7 +78,7 @@ class WipeLogic:
                     proc.kill()
                     outs, errs = proc.communicate()
 
-
+            # Mount the device
             subprocess.run(['sudo', 'mount', self.selected_drive, mount_point], check=True)
 
             # Show completion message
