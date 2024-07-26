@@ -24,7 +24,7 @@ class WipeLogic:
     def _wipe_thread(self):
         try:
             if self.is_mounted(self.selected_drive):
-                print('1')
+
                 subprocess.run(['sudo', 'umount', '-lf', self.selected_drive], check=True)
 
             # Perform wiping operations
@@ -56,11 +56,11 @@ class WipeLogic:
             cryptsetup_command = ['sudo', 'cryptsetup', 'luksFormat', '--type', 'luks2', '--batch-mode', '--key-file',
                                   passphrase_file, '--label', 'MYLUKS', self.selected_drive]
             time.sleep(3)
-            print('print')
+
             subprocess.run(cryptsetup_command, check=True)
-            print('4')
+
             if self.is_mounted(self.selected_drive):
-                print('1')
+
                 subprocess.run(['sudo', 'umount', '-lf', self.selected_drive], check=True)
             subprocess.run(
                 ['sudo', 'cryptsetup', 'luksOpen', '--key-file', passphrase_file, self.selected_drive, 'MYLUKS'],

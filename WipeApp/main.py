@@ -96,8 +96,6 @@ def create_button(parent, text, command, height=5, width=50, font=('Comfortaa', 
         bg=bg
     )
 
-
-# Creates the interface of the main menu
 base.attributes("-fullscreen", True)
 base.configure(bg="#010101")
 style = ttk.Style()
@@ -117,7 +115,7 @@ base.bind("<Down>", navigate_down)
 base.bind("<Return>", activate_button)
 wipe = create_button(frame, text="Wipe", command=wipe_clicker)
 wipe.grid(column=1, row=0, sticky="nsew", pady=(80, 0))
-quit = create_button(frame, text="Reset", command=base.quit)
+quit = create_button(frame, text="Quit", command=base.quit)
 quit.grid(column=1, row=2, sticky="nsew", pady=(0, 50))
 first_mac = print_first_mac_address()
 first_mac2 = first_mac.upper()
