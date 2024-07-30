@@ -1,0 +1,17 @@
+Navigation is simple :
+
+In the Wipe-Exit menu, it's up and down to navigate and enter to select your option
+Exit or Quit will shut down the computer
+Wipe will open the wipe menu
+
+In the wipe menu :
+To start navigation you need to press tab (Two arrows that are over the Caps Lock (Verr Maj) button)
+Up and down navigation to navigate between drives
+Anything labelled as SDA SDB or SDC will not be able to be wiped
+You have to search for anything called NVME and choose the first one you find
+When you choose your drive you will have a confirm prompt
+The confirm button will close it and start the wiping process
+The cancel button will close the prompt and get back to the menu
+
+IMPORTANT :
+If the drive has already been wiped with the software, a second wipe right after will create an error saying the drive is busy
