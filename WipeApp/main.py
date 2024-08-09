@@ -15,7 +15,7 @@ from wipeMenu import wipeMenuClass
 base = tkinter.Tk()
 def reboot():
     try:
-        subprocess.run(['sudo', 'reboot'], check=True)  # Run the reboot command
+        subprocess.run(['sudo', 'poweroff'], check=True)  # Run the reboot command
     except subprocess.CalledProcessError as e:
         print(f"Error trying to reboot: {e}")
         tkinter.messagebox.showerror("Error", f"Failed to reboot the system: {str(e)}")
