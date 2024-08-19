@@ -20,29 +20,6 @@ def reboot():
         print(f"Error trying to reboot: {e}")
         tkinter.messagebox.showerror("Error", f"Failed to reboot the system: {str(e)}")
 
-# Prints the first mac address the computer has
-# def print_first_mac_address():
-#     try:
-#         output = subprocess.check_output(['ifconfig']).decode('utf-8')
-#         lines = output.split('\n')
-#         is_up = False
-#         for line in lines:
-#             if 'flags=' in line:  # Check for the line with interface flags
-#                 # Check if the interface is UP and RUNNING
-#                 if 'UP' in line and 'RUNNING' in line:
-#                     is_up = True
-#                 else:
-#                     is_up = False  # Reset for the next interface
-#
-#             if is_up and 'ether' in line:  # Look for the line containing 'ether' when UP
-#                 parts = line.strip().split()
-#                 mac_address_index = parts.index('ether') + 1
-#                 return parts[mac_address_index].upper()  # Return the MAC address found in uppercase
-#     except subprocess.CalledProcessError as e:
-#         print(f"Error running ifconfig: {e}")
-#     return "00-00-00-00-00-00"
-
-
 # Navigates up between the wipe menu and the exit button
 def navigate_up(event):
     if event.keysym == "Up":

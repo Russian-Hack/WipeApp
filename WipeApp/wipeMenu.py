@@ -71,7 +71,7 @@ class wipeMenuClass:
                 bind_keys(self)
                 self.my_tree.focus_set()
                 self.my_tree.selection_set(self.my_tree.get_children()[0])
-            #Vert important it's the whole thing that makes the popup appear
+            #Very important : it's the whole thing that makes the popup appear
             confirm_popup = CustomConfirmation(self.new_window, confirm_message, confirm_action, cancel_action)
 
         # Starts the wipeLogic script on the drive I choose
